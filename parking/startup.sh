@@ -1,0 +1,5 @@
+export NODE_ORACLEDB_USER=system
+export NODE_ORACLEDB_PASSWORD=oracle
+export NODE_ORACLEDB_CONNECTIONSTRING=0.0.0.0:49161/xe
+export NODE_ELASTIC_HOST=0.0.0.0:9200
+swagger project  start 

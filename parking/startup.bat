@@ -1,0 +1,7 @@
+@echo off
+set NODE_ORACLEDB_USER=system
+set NODE_ORACLEDB_PASSWORD=oracle
+set NODE_ORACLEDB_CONNECTIONSTRING=192.168.99.100:49161/xe
+set NODE_ELASTIC_HOST=192.168.99.100:9200
+swagger project start
+@echo on

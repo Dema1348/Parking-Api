@@ -1,0 +1,1476 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Parking api
+host: 'localhost:10010'
+basePath: /v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      x-swagger-router-controller: auth
+      operationId: login
+      summary: Valida las credenciales del usuario
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credenciales
+          description: Credenciales del usuario
+          required: true
+          schema:
+            $ref: '#/definitions/credenciales'
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/dataLogin'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '401':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+  /admin/login:
+    post:
+      tags:
+        - Auth
+      x-swagger-router-controller: auth
+      operationId: loginAdmin
+      summary: Valida las credenciales del admin
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credenciales
+          description: Credenciales del usuario
+          required: true
+          schema:
+            $ref: '#/definitions/credenciales'
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/dataLoginAdmin'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '401':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+  /admin/loginF:
+    post:
+      tags:
+        - Auth
+      x-swagger-router-controller: auth
+      operationId: loginAdminF
+      summary: Valida las credenciales del admin financiero
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credenciales
+          description: Credenciales del usuario
+          required: true
+          schema:
+            $ref: '#/definitions/credenciales'
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/dataLoginAdminF'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '401':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+  /admin/pagos:
+    post:
+      tags:
+        - Reserva
+      x-swagger-router-controller: reserva
+      operationId: reservaPagadas
+      summary: Busca todos los pagos del sistema
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/pagosUsuarios'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '401':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /admin/estadopagos:
+    post:
+      tags:
+        - Reserva
+      x-swagger-router-controller: reserva
+      operationId: reservaEstados
+      summary: Obtiene un resumen de los estados de los pagos
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/estadoPagos'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '401':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /admin/update:
+    post:
+      summary: Activa o desabilita un usuario
+      description: Permite cambiar el estado de un usuario 
+      tags:
+        - User
+      x-swagger-router-controller: user
+      operationId: updatesUser
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Informacion sobre el usuario que quiere ser activado o desabilitado, solo es necesario enviar el rut del usuario y el estado nuevo 1 para ser habilitado, 0 para ser desactivado
+          schema:
+            $ref: '#/definitions/userInfo'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /user:
+    post:
+      summary: Crea un usuario
+      description: Permite la creación de un nuevo usuario.
+      tags:
+        - User
+      x-swagger-router-controller: user
+      operationId: create
+      parameters:
+        - in: body
+          name: body
+          description: Crea un usuario
+          schema:
+            $ref: '#/definitions/user'
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+  /user/estacionamiento:
+    get:
+      summary: obtiene los estacionamientos del usuario
+      description: Permite la obtener todos los estacionamientos  del usuario
+      tags:
+        - User
+        - Estacionamiento
+      x-swagger-router-controller: user
+      operationId: findEstacionamientos
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/estacionamientosUser'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /user/auto:
+    get:
+      summary: obtiene los auto del usuario
+      description: Permite la obtener todos los auto  del usuario
+      tags:
+        - User
+        - Auto
+      x-swagger-router-controller: user
+      operationId: findAutos
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/autosUser'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /user/reservas:
+    get:
+      summary: obtiene los reservas del usuario
+      description: Permite la obtener todos las reservas del usuario
+      tags:
+        - User
+        - Reserva
+      x-swagger-router-controller: user
+      operationId: findReservas
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/reservasUser'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []        
+  /user/pagos:
+    get:
+      summary: obtiene los pagos del usuario
+      description: Permite la obtener todos las pagos del usuario
+      tags:
+        - User
+        - Reserva
+      x-swagger-router-controller: user
+      operationId: findPagos
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/pagosUser'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []   
+  /user/pendientes:
+    get:
+      summary: obtiene las calificaciones pendientes del usuario
+      description: Permite las calificaciones pendientes  del usuario
+      tags:
+        - User
+        - Calificación
+      x-swagger-router-controller: user
+      operationId: findPendientes
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/pendientesUser'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: [] 
+  /user/rate:
+    post:
+      summary: Permite calificar un usuario
+      description: Permite la calificacion de un usuario en el sistema
+      tags:
+        - User
+        - Calificación
+      x-swagger-router-controller: user
+      operationId: createRate
+      parameters:
+        - in: body
+          name: body
+          description: ''
+          required: true
+          schema:
+            $ref: '#/definitions/rate'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: [] 
+  /user/update:
+    get:
+      summary: cambia el rol del  usuario a dueño
+      description: Permite cambiar el rol del usuario de cliente a dueño
+      tags:
+        - User
+      x-swagger-router-controller: user
+      operationId: updateRol
+      parameters:
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+
+  /auto:
+    post:
+      tags:
+        - Auto
+        - User
+      x-swagger-router-controller: auto
+      operationId: createAuto
+      summary: Crea un auto para el usuario
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Informacion del auto
+          schema:
+            $ref: '#/definitions/auto'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+    put:
+      tags:
+        - Auto
+        - User
+      x-swagger-router-controller: auto
+      operationId: updateAuto
+      summary: Actualiza el auto del usuario
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Informacion del auto
+          schema:
+            $ref: '#/definitions/auto'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /auto/{id}:
+    delete:
+      tags:
+        - Auto
+        - User
+      x-swagger-router-controller: auto
+      operationId: deleteAuto
+      summary: Elimina el auto del usuario
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID del auto el cual sera eliminado
+          required: true
+          type: string
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /reserva/{id}:
+    get:
+      tags:
+        - Reserva
+        - Auto
+        - User
+      x-swagger-router-controller: reserva
+      operationId: detalleReserva
+      summary: Muestra el detalle de una reserva
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID de la reserva
+          required: true
+          type: string
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/reserva'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Reserva
+      x-swagger-router-controller: reserva
+      operationId: deleteReserva
+      summary: Elimina una reserva
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID de la reserva
+          required: true
+          type: string
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /reserva:
+    post:
+      tags:
+        - Reserva
+        - Auto
+      x-swagger-router-controller: reserva
+      operationId: createReserva
+      summary: Crea una nueva reserva
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Crea un usuario
+          schema:
+            $ref: '#/definitions/reserva'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento:
+    post:
+      tags:
+        - Estacionamiento
+      x-swagger-router-controller: estacionamiento
+      operationId: createEstacionamiento
+      summary: Crea un estacionamiento para el dueño
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Informacion del estacionamiento
+          schema:
+            $ref: '#/definitions/estacionamiento'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento/{id}/horario:
+    get:
+      tags:
+        - Estacionamiento
+        - Horario
+      x-swagger-router-controller: estacionamiento
+      operationId: findHorarios
+      summary: obtiene los horarios del estacianamiento
+      description: Permite la obtener todos los auto  del estacionamiento
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID del estacionamiento el cual sera buscado
+          required: true
+          type: string
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/horariosEsta'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento/{id}:
+    delete:
+      tags:
+        - Estacionamiento
+        - User
+      x-swagger-router-controller: estacionamiento
+      operationId: deleteEstacionamiento
+      summary: Elimina el estacionamiento del usuario
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          description: ID del estacionamiento el cual sera eliminado
+          required: true
+          type: string
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento/geo:
+    get:
+      tags:
+        - Estacionamiento
+      x-swagger-router-controller: estacionamiento
+      operationId: findByGeo
+      summary: Busca un estacionamiento  dada la geolocalicación
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: query 
+          name: lat
+          description: Latitud del la ubicación.
+          required: true
+          type: number
+        - in: query
+          name: lon
+          description: Longitud del la ubicación.
+          required: true
+          type: number
+        - in: query
+          name: rango
+          description: Distancia desde la ubicación.
+          type: string
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/estacionamientos'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento/disabled:
+    post:
+      tags:
+        - Estacionamiento
+      x-swagger-router-controller: estacionamiento
+      operationId: disabled
+      summary: Desabilita un estacionamiento
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          description: Id del estacionamiento
+          required: true
+          schema:
+            type: number
+            format: int64
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento/enabled:
+    post:
+      tags:
+        - Estacionamiento
+      x-swagger-router-controller: estacionamiento
+      operationId: enabled
+      summary: Habilita un estacionamiento
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          description: Id del estacionamiento
+          required: true
+          schema:
+            type: number
+            format: int64
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /estacionamiento/comuna:
+    get:
+      tags:
+        - Estacionamiento
+      x-swagger-router-controller: estacionamiento
+      operationId: findByComuna
+      summary: Busca un estacionamiento  dada la comuna
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: query 
+          name: comuna
+          description: Id de la comuna.
+          required: true
+          type: number
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/estacionamientos'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /horario:
+    post:
+      tags:
+        - Horario
+      x-swagger-router-controller: horario
+      operationId: createHorario
+      summary: Crea un horario para un estaciomientoo
+      description: ''
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Informacion del horario
+          schema:
+            $ref: '#/definitions/horario'
+        - in: header
+          name: api_key
+          description: ''
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Operación exitosa
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '400':
+          description: Solicitud incorrecta
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '403':
+          description: Credenciales incorrectas
+          schema:
+            $ref: '#/definitions/mensajeModel'
+        '500':
+          description: Error en sistema
+          schema:
+            $ref: '#/definitions/mensajeModel'
+      security:
+        - api_key: []
+  /swagger:
+    x-swagger-pipe: swagger_raw
+definitions:
+  mensajeModel:
+    type: object
+    properties:
+      message:
+        type: string
+      code:
+        type: string
+  credenciales:
+    type: object
+    properties:
+      correo:
+        type: string
+      password:
+        type: string
+  user:
+    type: object
+    properties:
+      rut:
+        type: integer
+        format: int64
+      div:
+        type: string
+      fechaNac:
+        type: string
+        format: date
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      correo:
+        type: string
+      password:
+        type: string
+      telefono:
+        type: integer
+        format: int64
+      sexo:
+        type: string
+      numeroTarjeta:
+        type: integer
+        format: int64
+      cv:
+        type: string
+      rol:
+        type: integer
+        format: int64
+  userInfo:
+    type: object
+    properties:
+      rut:
+        type: integer
+        format: int64
+      div:
+        type: string
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      correo:
+        type: string
+      telefono:
+        type: integer
+        format: int64
+      estado:
+        type: integer
+        format: int64     
+  dataLogin:
+    type: object
+    properties:
+      rut:
+        type: integer
+        format: int64
+      div:
+        type: string
+      ci:
+        type: string
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      correo:
+        type: string
+      telefono:
+        type: integer
+        format: int64
+      sexo:
+        type: string
+      numeroTarjeta:
+        type: integer
+        format: int64
+      cv:
+        type: string
+      rol:
+        type: integer
+        format: int64
+      token:
+        type: string
+      rate:
+        type: integer
+        format: int64
+  dataLoginAdmin:
+    type: object
+    properties:
+      usuarios:
+        $ref: '#/definitions/usuarios'
+      token:
+        type: string
+  dataLoginAdminF:
+    type: object
+    properties:
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      correo:
+        type: string
+      token:
+        type: string
+  estadoPagos:
+    type: object
+    properties:
+      total:
+        type: integer
+        format: int64
+      aprovados:
+        type: integer
+        format: int64
+      reprovados:
+        type: integer
+        format: int64
+      pendientes:
+        type: integer
+        format: int64
+  usuarios:
+    type: array
+    items:
+      $ref: '#/definitions/userInfo'
+  horariosEsta:
+    type: array
+    items:
+      $ref: '#/definitions/horario'
+  reservasUser:
+    type: array
+    items:
+      $ref: '#/definitions/reserva'
+  auto:
+    type: object
+    properties:
+      patente:
+        type: string
+      marca:
+        type: string
+      color:
+        type: string
+      motor:
+        type: string
+      chasis:
+        type: string
+  estacionamientos:
+    type: array
+    items:
+      $ref: '#/definitions/estacionamientoFull'
+  estacionamiento:
+    type: object
+    properties:
+      id:
+        description: Id del estacionamiento, la cual no se envia al momento de crear un estacionamiento
+        type: integer
+        format: int64
+      horarios:
+        description: indica la cantidad de horararios que tiene activos el estacionamiento
+        type: integer
+        format: int64
+      costo:
+        type: integer
+        format: int64
+      geo:
+        $ref: '#/definitions/geo'
+      comunaId:
+        type: integer
+        format: int64
+      estado:
+        type: integer
+        format: int64
+  rate:
+    type: object
+    properties:
+      id:
+        description: Id de la calificación
+        type: integer
+        format: int64
+      comentario:
+        type: string   
+      rate:
+        description: Cantidad de estrellas del 1 al 5
+        type: integer
+        format: int64
+  estacionamientoFull:
+    type: object
+    properties:
+      costo:
+        type: integer
+        format: int64
+      geo:
+        $ref: '#/definitions/geo'
+      comunaId:
+        type: integer
+        format: int64
+      comuna:
+        type: string
+      id:
+        type: integer
+        format: int64
+      dueño:
+        $ref: '#/definitions/dueño'
+  autosUser:
+    type: array
+    items:
+      $ref: '#/definitions/auto' 
+  pagosUser:
+    type: array
+    items:
+      $ref: '#/definitions/pago' 
+  pagosUsuarios:
+    type: array
+    items:
+      $ref: '#/definitions/detallePago' 
+  pendientesUser:
+    type: array
+    items:
+      $ref: '#/definitions/pendiente' 
+  estacionamientosUser:
+    type: array
+    items:
+      $ref: '#/definitions/estacionamiento'
+  dueño:
+    type: object
+    properties:
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      rut:
+        type: integer
+        format: int64
+      telefono:
+        type: integer
+        format: int64
+      correo:
+        type: string
+  horario:
+    type: object
+    properties:
+      fecha:
+        type: string
+        format: dateTime
+      horaTermino:
+        type: string
+        format: dateTime
+      horaInicio:
+        type: string
+        format: dateTime
+      idEstacionamiento:
+        type: integer
+        format: int64
+      idHorario:
+        type: integer
+        format: int64
+      type:
+        description: puede ser del tipo Ocupado o Libre
+        type: string
+      idReserva:
+        description: si es del tipo ocupado devuelve el id de la reserva
+        type: integer
+        format: int64
+  pendiente:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      horaEntrada:
+        type: string
+        format: dateTime
+      horaSalida:
+        type: string
+        format: dateTime
+      idReserva:
+        type: integer
+        format: int64
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+  pago:
+    type: object
+    properties:
+      horaEntrada:
+        type: string
+        format: dateTime
+      horaSalida:
+        type: string
+        format: dateTime
+      estadoPago:
+        description: puede ser del tipo Aprovado  o rechazado
+        type: string
+      total:
+        type: integer
+        format: int64
+      type:
+        description: indica que tipo de pago se cancelo
+        type: string
+  detallePago:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      rut:
+        type: integer
+        format: int64
+      div:
+        type: string
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      total:
+        type: integer
+        format: int64
+      estadoPago:
+        description: puede ser del tipo Aprovado  o rechazado
+        type: string
+      fechaPago:
+        type: string
+        format: dateTime
+  reserva:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      horaEntrada:
+        type: string
+        format: dateTime
+      horaSalida:
+        type: string
+        format: dateTime
+      fecha:
+        type: string
+        format: dateTime
+      total:
+        type: integer
+        format: int64
+      autoPatente:
+        type: string
+      telefono:
+        type: integer
+        format: int64
+      correo:
+        type: string
+      nombre:
+        type: string
+      apPaterno:
+        type: string
+      apMaterno:
+        type: string
+      idHorario:
+        type: integer
+        format: int64
+  geo:
+    type: object
+    properties:
+      lat:
+        type: number
+        format: float
+      lon:
+        type: number
+        format: float
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header

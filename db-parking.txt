@@ -1,0 +1,200 @@
+-- Generado por Oracle SQL Developer Data Modeler 4.1.3.901
+--   en:        2016-10-24 09:32:23 CLT
+--   sitio:      Oracle Database 11g
+--   tipo:      Oracle Database 11g
+
+
+
+
+CREATE TABLE Auto
+  (
+    patente     VARCHAR2 (100) CONSTRAINT NNC_Auto_patente NOT NULL ,
+    marca       VARCHAR2 (200) CONSTRAINT NNC_Auto_marca NOT NULL ,
+    color       VARCHAR2 (200) ,
+    motor       VARCHAR2 (200) ,
+    eliminado   INTEGER ,
+    chasis      VARCHAR2 (200) ,
+    Persona_rut INTEGER NOT NULL
+  ) ;
+ALTER TABLE Auto ADD CONSTRAINT Auto_PK PRIMARY KEY ( patente ) ;
+
+
+CREATE TABLE Calific
+  (
+    id         INTEGER CONSTRAINT NNC_Calificacion_id NOT NULL ,
+    puntos     INTEGER CONSTRAINT NNC_Cal_puntos NOT NULL ,
+    comentario VARCHAR2 (100) ,
+    realizado  INTEGER ,
+    Usuario_id INTEGER
+  ) ;
+ALTER TABLE Calific ADD CONSTRAINT Cal_PK PRIMARY KEY ( id ) ;
+
+
+CREATE TABLE Comuna
+  (
+    id           INTEGER CONSTRAINT NNC_Comuna_id_Comuna NOT NULL ,
+    nombre       VARCHAR2 (100) CONSTRAINT NNC_Comuna_nombre NOT NULL ,
+    Provincia_id INTEGER NOT NULL
+  ) ;
+ALTER TABLE Comuna ADD CONSTRAINT Comuna_PK PRIMARY KEY ( id ) ;
+
+
+CREATE TABLE Estacionamiento
+  (
+    id     INTEGER CONSTRAINT NNC_Estacionamiento_id_estac NOT NULL ,
+    estado INTEGER CONSTRAINT NNC_Estacionamiento_estado NOT NULL ,
+    costo  INTEGER CONSTRAINT NNC_Estacionamiento_costo NOT NULL ,
+    logitud FLOAT NOT NULL ,
+    latitud FLOAT NOT NULL ,
+    eliminado   INTEGER ,
+    Comuna_id   INTEGER CONSTRAINT NNC_Estacionamiento_Comuna_id NOT NULL ,
+    Persona_rut INTEGER NOT NULL
+  ) ;
+ALTER TABLE Estacionamiento ADD CONSTRAINT Estacionamiento_PK PRIMARY KEY ( id ) ;
+
+
+CREATE TABLE Horario
+  (
+    id_horario         INTEGER NOT NULL ,
+    fecha              DATE CONSTRAINT NNC_Horario_id_horario NOT NULL ,
+    hora_inicio        DATE CONSTRAINT NNC_Horario_hora_entrada NOT NULL ,
+    hora_termino       DATE CONSTRAINT NNC_Horario_hora_salida NOT NULL ,
+    estado             INTEGER ,
+    Estacionamiento_id INTEGER NOT NULL
+  ) ;
+ALTER TABLE Horario ADD CONSTRAINT Horario_PK PRIMARY KEY ( id_horario ) ;
+
+
+CREATE TABLE Persona
+  (
+    rut         INTEGER CONSTRAINT NNC_Persona_rut NOT NULL ,
+    div         CHAR (1) CONSTRAINT NNC_Persona_div NOT NULL ,
+    fecha_nac   DATE CONSTRAINT NNC_Persona_fecha_nac NOT NULL ,
+    nombre      VARCHAR2 (200) CONSTRAINT NNC_Persona_nombre NOT NULL ,
+    ap_paterno  VARCHAR2 (70) CONSTRAINT NNC_Persona_ap_paterno NOT NULL ,
+    ap_materno  VARCHAR2 (70) CONSTRAINT NNC_Persona_ap_materno NOT NULL ,
+    sexo        CHAR (1) NOT NULL ,
+    cv          VARCHAR2 (50) NOT NULL ,
+    num_tarjeta INTEGER NOT NULL
+  ) ;
+ALTER TABLE Persona ADD CONSTRAINT Persona_PK PRIMARY KEY ( rut ) ;
+
+
+CREATE TABLE Provincia
+  (
+    id        INTEGER CONSTRAINT NNC_Ciudad_id NOT NULL ,
+    nombre    VARCHAR2 (100) CONSTRAINT NNC_Ciudad_nombre NOT NULL ,
+    Region_id INTEGER NOT NULL
+  ) ;
+ALTER TABLE Provincia ADD CONSTRAINT Provincia_PK PRIMARY KEY ( id ) ;
+
+
+CREATE TABLE Region
+  (
+    id              INTEGER CONSTRAINT NNC_Region_id_region NOT NULL ,
+    nombre          VARCHAR2 (100) CONSTRAINT NNC_Region_nombre NOT NULL ,
+    nombre_cardinal VARCHAR2 (100) NOT NULL
+  ) ;
+ALTER TABLE Region ADD CONSTRAINT Region_PK PRIMARY KEY ( id ) ;
+
+
+CREATE TABLE Rol
+  (
+    id_rol INTEGER CONSTRAINT NNC_Rol_id_rol NOT NULL ,
+    "desc" VARCHAR2 (100) CONSTRAINT NNC_Rol_desc NOT NULL
+  ) ;
+ALTER TABLE Rol ADD CONSTRAINT Rol_PK PRIMARY KEY ( id_rol ) ;
+
+
+CREATE TABLE Servicio
+  (
+    id           INTEGER CONSTRAINT NNC_Ocupado_id_ocupado NOT NULL ,
+    hora_entrada DATE CONSTRAINT NNC_Ocupado_Fecha_entrada NOT NULL ,
+    hora_salida  DATE CONSTRAINT NNC_Ocupado_fecha_salida NOT NULL ,
+    total        INTEGER ,
+    fecha        DATE CONSTRAINT NNC_Orden_fecha NOT NULL ,
+    estado       INTEGER ,
+    Auto_patente VARCHAR2 (100) NOT NULL ,
+    Horario_id   INTEGER NOT NULL
+  ) ;
+ALTER TABLE Servicio ADD CONSTRAINT Ocupado_PK PRIMARY KEY ( id ) ;
+
+
+CREATE TABLE Usuario
+  (
+    id          INTEGER CONSTRAINT NNC_Usuario_id_usuario NOT NULL ,
+    correo      VARCHAR2 (200) CONSTRAINT NNC_Usuario_correo NOT NULL ,
+    password    VARCHAR2 (255) CONSTRAINT NNC_Usuario_password NOT NULL ,
+    telefono    INTEGER ,
+    estado      INTEGER CONSTRAINT NNC_Usuario_estado NOT NULL ,
+    Persona_rut INTEGER NOT NULL ,
+    Rol_id      INTEGER NOT NULL
+  ) ;
+ALTER TABLE Usuario ADD CONSTRAINT Usuario_PK PRIMARY KEY ( id ) ;
+ALTER TABLE Usuario ADD CONSTRAINT Usuario__UN UNIQUE ( correo ) ;
+
+
+ALTER TABLE Servicio ADD CONSTRAINT Auto_FK FOREIGN KEY ( Auto_patente ) REFERENCES Auto ( patente ) ;
+
+ALTER TABLE Auto ADD CONSTRAINT Auto_Persona_FK FOREIGN KEY ( Persona_rut ) REFERENCES Persona ( rut ) ;
+
+ALTER TABLE Estacionamiento ADD CONSTRAINT Com_FK FOREIGN KEY ( Comuna_id ) REFERENCES Comuna ( id ) ;
+
+ALTER TABLE Horario ADD CONSTRAINT Estacionamiento_FK FOREIGN KEY ( Estacionamiento_id ) REFERENCES Estacionamiento ( id ) ;
+
+ALTER TABLE Estacionamiento ADD CONSTRAINT Estacionamiento_Persona_FK FOREIGN KEY ( Persona_rut ) REFERENCES Persona ( rut ) ;
+
+ALTER TABLE Servicio ADD CONSTRAINT Horario_FK FOREIGN KEY ( Horario_id ) REFERENCES Horario ( id_horario ) ;
+
+ALTER TABLE Usuario ADD CONSTRAINT Per_FK FOREIGN KEY ( Persona_rut ) REFERENCES Persona ( rut ) ;
+
+ALTER TABLE Comuna ADD CONSTRAINT Provincia_FK FOREIGN KEY ( Provincia_id ) REFERENCES Provincia ( id ) ;
+
+ALTER TABLE Provincia ADD CONSTRAINT Region_FK FOREIGN KEY ( Region_id ) REFERENCES Region ( id ) ;
+
+ALTER TABLE Usuario ADD CONSTRAINT Rol_FK FOREIGN KEY ( Rol_id ) REFERENCES Rol ( id_rol ) ;
+
+ALTER TABLE Calific ADD CONSTRAINT Usu_FK FOREIGN KEY ( Usuario_id ) REFERENCES Usuario ( id ) ;
+
+
+-- Informe de Resumen de Oracle SQL Developer Data Modeler: 
+-- 
+-- CREATE TABLE                            11
+-- CREATE INDEX                             0
+-- ALTER TABLE                             23
+-- CREATE VIEW                              0
+-- ALTER VIEW                               0
+-- CREATE PACKAGE                           0
+-- CREATE PACKAGE BODY                      0
+-- CREATE PROCEDURE                         0
+-- CREATE FUNCTION                          0
+-- CREATE TRIGGER                           0
+-- ALTER TRIGGER                            0
+-- CREATE COLLECTION TYPE                   0
+-- CREATE STRUCTURED TYPE                   0
+-- CREATE STRUCTURED TYPE BODY              0
+-- CREATE CLUSTER                           0
+-- CREATE CONTEXT                           0
+-- CREATE DATABASE                          0
+-- CREATE DIMENSION                         0
+-- CREATE DIRECTORY                         0
+-- CREATE DISK GROUP                        0
+-- CREATE ROLE                              0
+-- CREATE ROLLBACK SEGMENT                  0
+-- CREATE SEQUENCE                          0
+-- CREATE MATERIALIZED VIEW                 0
+-- CREATE SYNONYM                           0
+-- CREATE TABLESPACE                        0
+-- CREATE USER                              0
+-- 
+-- DROP TABLESPACE                          0
+-- DROP DATABASE                            0
+-- 
+-- REDACTION POLICY                         0
+-- 
+-- ORDS DROP SCHEMA                         0
+-- ORDS ENABLE SCHEMA                       0
+-- ORDS ENABLE OBJECT                       0
+-- 
+-- ERRORS                                   0
+-- WARNINGS                                 0
